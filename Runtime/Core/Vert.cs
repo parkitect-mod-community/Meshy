@@ -4,17 +4,17 @@ using UnityEngine;
 
 namespace PMC.Meshy
 {
-    public class TKVert
+    public class Vert
     {
         public Vector3 pos { get; set; }
-        public TKEdge Edge { get; set; }
+        public Edge Edge { get; set; }
 
         public int EdgeCount()
         {
             int count = 0;
             if (Edge != null)
             {
-                TKEdge first, iter;
+                Edge first, iter;
                 first = iter = Edge;
                 do
                 {
@@ -25,13 +25,12 @@ namespace PMC.Meshy
             return count;
         }
 
-        public static IEnumerable<TKEdge> IterateEdges(Direction direction, TKVert vert)
+        public static IEnumerable<Edge> IterateEdges(Vert vert, Direction direction)
         {
-
-            TKEdge first = vert.Edge;
+            Edge first = vert.Edge;
             if (first == null)
                 yield break;
-            TKEdge iterator = first;
+            Edge iterator = first;
             switch (direction)
             {
                 case Direction.FORWARD:
@@ -39,6 +38,7 @@ namespace PMC.Meshy
                     {
                         yield return iterator;
                     } while ((iterator = iterator.NextEdge(vert)) != first && iterator != null);
+
                     break;
                 case Direction.BACKWARD:
                     do

@@ -2,32 +2,32 @@ using UnityEngine;
 
 namespace PMC.Meshy
 {
-    public class TKEdge
+    public class Edge
     {
 
         public class TKEdgeDisk
         {
-            public TKEdge Prev { get; set; }
-            public TKEdge Next { get; set; }
+            public Edge Prev { get; set; }
+            public Edge Next { get; set; }
         }
 
         public int Group { get; set; }
         public int SupportType { get; set; }
 
-        public TKLoop Loop { get; set; }
+        public Loop Loop { get; set; }
 
-        public TKVert V1 { get; set; }
+        public Vert V1 { get; set; }
 
-        public TKVert V2 { get; set; }
+        public Vert V2 { get; set; }
         public TKEdgeDisk DiskV1Link { get; } = new TKEdgeDisk();
         public TKEdgeDisk DiskV2Link { get; } = new TKEdgeDisk();
 
-        TKEdge()
+        Edge()
         {
 
         }
 
-        public TKEdge(TKVert v1, TKVert v2)
+        public Edge(Vert v1, Vert v2)
         {
             V1 = v1;
             V2 = v2;
@@ -35,12 +35,12 @@ namespace PMC.Meshy
             AttachToDiskEdge(v2);
         }
 
-        public static TKEdge EdgeExists(TKVert v1, TKVert v2)
+        public static Edge EdgeExists(Vert v1, Vert v2)
         {
-            TKEdge e_a, e_b;
+            Edge e_a, e_b;
             if ((e_a = v1.Edge) != null && (e_b = v2.Edge) != null)
             {
-                TKEdge e_a_iter = e_a, e_b_iter = e_b;
+                Edge e_a_iter = e_a, e_b_iter = e_b;
                 do
                 {
                     if (e_a_iter.IsVertInEdge(v2))
@@ -59,20 +59,25 @@ namespace PMC.Meshy
             return null;
         }
 
-        public bool IsVertInEdge(TKVert v1)
+        public bool IsVertInEdge(Vert v1)
         {
             return V1 == v1 || V2 == v1;
         }
 
-        public bool IsVertInEdge(TKVert v1, TKVert v2)
+        public bool IsVertInEdge(Vert v1, Vert v2)
         {
             return (V1 == v1 && V2 == v2) ||
                    (V1 == v2 && V2 == v1);
         }
 
-        public static TKEdge FindEdge(TKVert v1, TKVert v2)
+        public bool IsEdgeLoop()
         {
-            TKEdge first, iter;
+            return Loop != null && Loop.RadialNext == Loop;
+        }
+
+        public static Edge FindEdge(Vert v1, Vert v2)
+        {
+            Edge first, iter;
             if (v1.Edge != null)
             {
                 first = iter = v1.Edge;
@@ -88,17 +93,17 @@ namespace PMC.Meshy
             return null;
         }
 
-        public TKEdge NextEdge(TKVert v)
+        public Edge NextEdge(Vert v)
         {
             return GetDiskLinkFromVert(v).Next;
         }
 
-        public TKEdge PrevEdge(TKVert v)
+        public Edge PrevEdge(Vert v)
         {
             return GetDiskLinkFromVert(v).Next;
         }
 
-        protected void AttachToDiskEdge(TKVert v)
+        public  void AttachToDiskEdge(Vert v)
         {
             if (v.Edge == null)
             {
@@ -123,7 +128,7 @@ namespace PMC.Meshy
             }
         }
 
-        protected void DetachDiskEdge(TKVert v)
+        public void DetachDiskEdge(Vert v)
         {
             TKEdgeDisk dl1, dl2;
             dl1 = GetDiskLinkFromVert(v);
@@ -147,7 +152,14 @@ namespace PMC.Meshy
             dl1.Next = dl1.Prev = null;
         }
 
-        protected bool SwapDiskVert(TKVert dest, TKVert src)
+        public void DetachDiskEdges()
+        {
+            DetachDiskEdge(V1);
+            DetachDiskEdge(V2);
+        }
+
+
+        protected bool SwapDiskVert(Vert dest, Vert src)
         {
             if (V1 == src)
             {
@@ -167,18 +179,18 @@ namespace PMC.Meshy
         }
 
 
-        protected void swapVert(TKVert dest, TKVert src)
+        protected void swapVert(Vert dest, Vert src)
         {
             DetachDiskEdge(src);
             SwapDiskVert(dest, src);
             AttachToDiskEdge(dest);
         }
 
-        protected void EdgeSwapVert(TKVert dest, TKVert src)
+        protected void EdgeSwapVert(Vert dest, Vert src)
         {
             if (Loop != null)
             {
-                TKLoop iter, first;
+                Loop iter, first;
                 iter = first = Loop;
                 do
                 {
@@ -203,7 +215,7 @@ namespace PMC.Meshy
         }
 
 
-        private TKEdgeDisk GetDiskLinkFromVert(TKVert vert)
+        private TKEdgeDisk GetDiskLinkFromVert(Vert vert)
         {
             if (vert == V2)
             {

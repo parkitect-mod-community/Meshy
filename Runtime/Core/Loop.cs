@@ -3,26 +3,35 @@ using System.Collections.Generic;
 
 namespace PMC.Meshy
 {
-    public class TKLoop
+    public class Loop
     {
-        public TKLoop(TKEdge e, TKVert v, TKFace f)
+        public Loop(Edge e, Vert v, Face f)
         {
             Edge = e;
             Vert = v;
             Face = f;
+            AttachRadialLoopEdge(e);
         }
 
-        public TKEdge Edge { get; set; }
-        public TKVert Vert { get; set; }
-        public TKFace Face { get; set; }
+        public Loop(Edge e, Vert v)
+        {
+            Edge = e;
+            Vert = v;
+            AttachRadialLoopEdge(e);
+        }
 
-        public TKLoop RadialNext { get; set; }
-        public TKLoop RadialPrev { get; set; }
 
-        public TKLoop Next { get; set; }
-        public TKLoop Prev { get; set; }
+        public Edge Edge { get; set; }
+        public Vert Vert { get; set; }
+        public Face Face { get; set; }
 
-        internal void AttachRadialLoopEdge(TKEdge edge)
+        public Loop RadialNext { get; set; }
+        public Loop RadialPrev { get; set; }
+
+        public Loop Next { get; set; }
+        public Loop Prev { get; set; }
+
+        internal void AttachRadialLoopEdge(Edge edge)
         {
             if (edge.Loop == null)
             {
@@ -43,7 +52,7 @@ namespace PMC.Meshy
             Edge = edge;
         }
 
-        internal void DetachRadialLoopEdge(TKEdge edge)
+        internal void DetachRadialLoopEdge(Edge edge)
         {
             if (RadialNext != this)
             {
@@ -64,12 +73,12 @@ namespace PMC.Meshy
             }
         }
 
-        public static IEnumerable<TKLoop> IterateRadialLoops(TKLoop loop, Direction direction)
+        public static IEnumerable<Loop> IterateRadialLoops(Loop loop, Direction direction)
         {
-            TKLoop first = loop;
+            Loop first = loop;
             if (first == null)
                 yield break;
-            TKLoop iterator = first;
+            Loop iterator = first;
             switch (direction)
             {
                 case Direction.FORWARD:
@@ -89,12 +98,12 @@ namespace PMC.Meshy
             }
         }
 
-        public IEnumerable<TKLoop> IterateLoop(TKLoop loop, Direction direction)
+        public static IEnumerable<Loop> IterateLoop(Loop loop, Direction direction)
         {
-            TKLoop first = loop;
+            Loop first = loop;
             if (first == null)
                 yield break;
-            TKLoop iterator = first;
+            Loop iterator = first;
             switch (direction)
             {
                 case Direction.FORWARD:
