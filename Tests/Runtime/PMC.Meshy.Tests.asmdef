@@ -1,0 +1,12 @@
+{
+    "name": "PMC.Meshy.Tests",
+    "references": [
+        "PMC.Meshy"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}

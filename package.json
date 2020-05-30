@@ -1,0 +1,18 @@
+{
+    "name": "com.meshy",
+    "displayName": "Meshy",
+    "version": "1.0.0",
+    "unity": "2018.3",
+    "description": "Mesh processing tools.",
+    "keywords": [
+    ],
+    "samples": [
+    ],
+    "dependencies": {
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/parkitect-mod-community/Meshy",
+        "revision": "ea0bd0c969779f359c7ca6e065338ac39a93c86a"
+    }
+}
